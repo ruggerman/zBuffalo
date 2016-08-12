@@ -1,0 +1,202 @@
+### 基本設定
+alias brew="env PATH=${PATH/\/Users\/kohei\/\.pyenv\/shims:/} brew" # pyenvパスによる「brew doctor」のwarning対処法
+export PATH="/usr/local/bin:$PATH"
+source /usr/local/git/contrib/completion/git-prompt.sh
+source /usr/local/git/contrib/completion/git-completion.bash
+GIT_PS1_SHOWDIRTYSTATE=true
+export PS1='\[\033[32m\][\u@\h\[\033[32m\]:\[\033[32m\]\w]\[\033[31m\]$(__git_ps1)\[\033[00m\]' # これでユーザ名@パソコン名表示 gitブランチ表示可能
+#export PS1="\[\e[0;32m\][\u@\h:\w]\$\[\e[00m\]"   #これでユーザ名@パソコン名表示出来る
+shopt -s autocd # cdなしで移動可能
+shopt -s dirspell # Tab補完可能
+shopt -s cdspell # cdするときディレクトリ名を補完可能
+shopt -s globstar # globで**が使用可能
+PROMPT_DIRTRIM=1 # 1ディレクトリ以上になると「...」で表示
+alias ls='ls -G' # lsでディレクトリにカラーを付与
+export LSCOLORS=Exfxcxdxbxegedabagacad # ディレクトリカラーをBold Blueに変更
+alias misc='ssh kmishima@misc.doshisha.ac.jp'
+alias ihospee='ssh kohei@172.22.54.166'
+alias kagoya='ssh kmishima@pro-100-99.kagoya.net'
+alias debian='ssh kohei@10.4.103.238'
+defaults write com.apple.screencapture name "screenshot" #スクリーンショットの名前の冒頭を「screenshot」に変更
+#export http_proxy='http://proxy.doshisha.ac.jp:8080' # プロキシを通す
+#export http_proxy='http://misc.doshisha.ac.jp:8080' # プロキシを通す
+#export https_proxy=$http_proxy # プロキシを通す
+#export ALL_PROXY=$http_proxy # プロキシを通す
+#export PYTHONPATH=/usr/local/Cellar/pyqt/4.10.3/lib/python2.7/site-packages:/usr/local/Cellar/sip/4.15.3/lib/python2.7/site-packages:$PYTHONPATH # pyqtiのパスを通す
+export PYTHONPATH=/usr/local/Cellar/pyqt/4.11.4/lib/python2.7/site-packages:/usr/local/Cellar/sip/4.17/lib/python2.7/site-packages
+#export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
+
+### 便利な省略コマンド
+alias dg='cd /Users/kohei/Desktop'
+alias rml='rm -rf'
+alias o='open'
+alias oo='open .'
+alias bd='brew doctor'
+alias bu='brew update'
+alias protege='/Users/kmishima/Documents/Protege-5.0.0-beta-17/run.command'
+alias mysql='mysql.server start;mysql -u root -p'
+function clone_kaogya(){
+  git clone kmishima@pro-100-99.kagoya.net:$1
+}
+
+### Gitコマンド用
+alias g='git'
+alias gs='git status'
+alias gaa='git add .'
+alias gc='git commit'
+alias gpom='git push origin master'
+alias gl='git pull'
+alias glo='git log --oneline --decorate --color --graph'
+alias gb='git branch'
+alias gba='git branch -a'
+alias gbco='git checkout ' # gitブランチの切り替え
+alias gbm='git merge ' # gitブランチマージ
+alias gbrm='git branch -d ' # gitブランチ削除
+
+### 便利な処理コマンド
+function pdfjoin(){
+  echo "複数pdfファイルを一つのpdfファイルにまとめる"
+  echo -n "出力ファイルpdf名 : "
+  read outfilename
+  /System/Library/Automator/Combine?PDF?Pages.action/Contents/Resources/join.py --output ${outfilename} ./*.pdf
+  echo "pdf結合完了！"
+}
+
+alias rmjva_class='rm *.class'
+function jva(){
+  echo "javaファイルを実行中..."
+  filename="${1%.*}" #拡張子を消すために設定
+  javac $filename.java
+  java $filename
+}
+
+function js(){ #JavaScriptのデバック用コマンド
+  echo "JavaScriptを実行中..."
+  chmod +x $1
+  ./$1
+}
+
+function c(){
+  echo "C言語ファイルを実行中..."
+  gcc $1
+  ./a.out
+}
+
+function rmasm(){ # assemblerのデバック用コマンド
+  filename="${1%.*}" #拡張子を消すために設定
+  rm $filename $filename.o
+} 
+function asm(){
+  echo "assemblerファイルを実行中..."
+  filename="${1%.*}" #拡張子を消すために設定
+  as -o $filename.o $filename.s
+  ld -o $filename -macosx_version_min 10.7 $filename.o
+  ./$filename
+}
+
+function timelapse(){
+  echo "複数の写真を繋げてタイムラプス動画を作る"
+  echo -n "フレームサイズ(何秒間隔)は? : "
+  read framesize
+  echo -n "写真の名前は（連番だとやりやすい：001~010なら03と入力）? : "
+  read dataname
+  echo -n "変換する写真の形式は（ex. png, jpeg）? : "
+  read dataform
+  echo -n "出力ファイル名は ? : "
+  read moviename
+  ffmpeg -r ${framesize} -i %${dataname}d.${dataform} -vcodec mjpeg -qscale 0 -y ${moviename}.avi
+}
+
+function mvextension(){
+  echo "複数ファイルの拡張子を一括で変更"
+  echo -n "Before 拡張子は? : "
+  read beforeExtension
+  echo -n "After 拡張子は? : "
+  read afterExtension
+  for filename in *.${beforeExtension};
+  do
+    mv $filename ${filename%.${beforeExtension}}.${afterExtension};
+  done
+}
+
+function xls2csv4all(){
+  echo "複数のxlsファイルをcsvに変換中..."
+  for filename in *.xls;
+  do
+    echo ${filename} "->" ${filename%.xls}.csv
+    xls2csv ${filename} ${filename%.xls}.csv;
+  done
+}
+
+function xlsx2csv4all(){
+  echo "複数のxlsxファイルをcsvに変換中..."
+  for filename in *.xlsx;
+  do
+    echo ${filename} "->" ${filename%.xlsx}.csv
+    xlsx2csv ${filename} ${filename%.xlsx}.csv;
+  done
+}
+
+function conv(){
+  echo "ある形式（A）のファイルを別の形式（B）へと変換します。（例：png -> pdf）"
+  echo -n "どの形式（A）を? : "
+  read Aformat
+  echo -n "どの形式（B）に？ : "
+  read Bformat
+  sips -s format ${Bformat} ./*.${Aformat} --out ./
+}
+
+# ブラウザ検索を行う
+google(){
+  local a="/Applications"
+  local u="https://www.google.co.jp/search?q="
+  case $1 in
+    -c) shif; open "${u}${*// /+}" -a "${a}/Google Chrome.app";;
+    -c) shif; open "${u}${*// /+}" -a "${a}/Firefox.app";;
+    -c) shif; open "${u}${*// /+}" -a "${a}/Safari.app";;
+    *) open "${u}${*// /+}";;
+  esac
+}
+
+function say_record(){
+  echo "sayコマンドを保存する"
+  echo -n "保存する内容は? : "
+  read saycontens
+  echo -n "保存する形式は? : "
+  read filename
+  say -f ${saycontents} -o ${filename}
+}
+
+# 構築したコマンド一覧
+function sshow(){
+  echo '--- 自分が設定したコマンド一覧表示 --- '
+  echo '- google : google検索を行う。引数として検索ワードを挿入可。'
+  echo '- conv : ある形式のファイルを別のファイルへと変換（例 : png -> pdf）。'
+  echo '- pdfjoin : 複数のpdfファイルを一つのpdfファイルにまとめる。'
+  echo '- mvextension : 複数ファイルの拡張子を一括で変更。'
+  echo '- timelapse : タイムラプス動画作成。'
+  echo '- dotgraph : dotファイルのグラフ生成。'
+  echo '- rdfgraph : rdfファイルのグラフ生成。'
+  echo '- js : JavaScriptファイルを実行。'
+  echo '- jva : javaファイルを実行。'
+  echo '- asm : assemblerファイルを実行。'
+  echo '- c : c言語ファイルを実行。'
+  echo '- xls2csv : xlsをcsvに変換。'
+  echo '- xlsx2csv : xlsxをcsvに変換。'
+}
+alias ipython='ipython --pylab'
+alias ipython='ipython --pylab'
+
+# tabilog用
+function tabilog_up(){
+   cd /Users/kohei/Desktop/tabilog/tabilog_web/tools/provisioning/bootstrapping/vm-local
+    vagrant up
+  }
+function tabilog_end(){
+  cd /Users/kohei/Desktop/tabilog/tabilog_web/tools/provisioning/bootstrapping/vm-local
+  vagrant halt
+  }
+function ssh_tabilog(){
+   cd /Users/kohei/Desktop/tabilog/tabilog_web/tools/provisioning/bootstrapping/vm-local
+    vagrant ssh
+  }

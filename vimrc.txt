@@ -1,0 +1,63 @@
+set number
+set showmatch
+set ruler       " カーソルが何行目の何列目に置かれているかを表示する
+set notitle   " ウインドウのタイトルバーにファイルのパス情報等を表示する
+set wildmenu   " コマンドラインモードで<Tab>キーによるファイル名補完を有効にする>
+set showcmd   " 入力中のコマンドを表示する
+set expandtab  " タブ入力を複数の空白入力に置き換える
+set incsearch   " 検索ワードの最初の文字を入力した時点で検索を開始する
+syntax on   " 構文毎に文字色を変化させる
+set autoindent   " 改行時に前の行のインデントを継続する "
+set smartindent   " 改行時に入力された行の末尾に合わせて次の行のインデントを増減する "
+set tabstop=4   " タブ文字の表示幅 "noremap
+set shiftwidth=2   " Vimが挿入するインデントの幅 "
+set smarttab   " 行頭の余白内で Tab を打ち込むと、'shiftwidth' の数だけインデントする "
+set whichwrap=b,s,h,l,<,>,[,]>   " カーソルを行頭、行末で止まらないようにする "
+set mouse=a
+inoremap <silent> jk <Esc>
+inoremap {<Enter> {}<Left><CR><ESC><S-o>
+inoremap <<Enter> <><Left><CR><ESC><S-o>
+inoremap [<Enter> []<Left><CR><ESC><S-o>
+inoremap (<Enter> ()<Left><CR><ESC><S-o>
+inoremap { {}<LEFT>
+inoremap < <><LEFT>
+inoremap [ []<LEFT>
+inoremap ( ()<LEFT>
+inoremap " ""<LEFT>
+inoremap ' ''<LEFT>
+
+inoremap <C-j> <Down>
+inoremap <C-n> <Down>
+inoremap <C-k> <Up>
+inoremap <C-p> <Up>
+inoremap <C-g> <Left>
+inoremap <C-b> <Left>
+inoremap <C-l> <Right>
+inoremap <C-e> <Esc>$i<Right>
+inoremap <C-a> <Esc>0i
+
+nnoremap <C-e> $
+nnoremap <C-a> 0
+nnoremap <C-l> <Right>
+
+" カーソル前の文字削除
+inoremap <silent> <C-h> <C-g>u<C-h>
+" カーソル後の文字削除
+inoremap <silent> <C-d> <Del>
+" カーソルから行頭まで削除
+inoremap <silent> <C-d>e <Esc>lc^
+" カーソルから行末まで削除
+inoremap <silent> <C-d>0 <Esc>lc$
+" カーソルから行頭までヤンク
+inoremap <silent> <C-y>e <Esc>ly0<Insert>
+" カーソルから行末までヤンク
+inoremap <silent> <C-y>0 <Esc>ly$<Insert>
+"カンレと行ハイライトon
+set cursorline
+"アンダーラインを引く（color terminal）
+highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
+"アンダーラインを引く(gui)"
+highlight CursorLine gui=underline guifg=NONE guibg=NONE
+
+"colorsche molokai
+colorschem ron
