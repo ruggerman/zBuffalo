@@ -1,3 +1,5 @@
+:set encoding=utf-8 " 日本語文字化けを防ぐ
+:set fileencodings=iso-2022-jp,euc-jp,sjis,utf-8 " 日本語文字化けを防ぐ
 set number
 set showmatch
 set ruler       " カーソルが何行目の何列目に置かれているかを表示する
@@ -13,18 +15,18 @@ set tabstop=4   " タブ文字の表示幅 "noremap
 set shiftwidth=2   " Vimが挿入するインデントの幅 "
 set smarttab   " 行頭の余白内で Tab を打ち込むと、'shiftwidth' の数だけインデントする "
 set whichwrap=b,s,h,l,<,>,[,]>   " カーソルを行頭、行末で止まらないようにする "
-set mouse=a
 inoremap <silent> jk <Esc>
-inoremap {<Enter> {}<Left><CR><ESC><S-o>
+inoremap {<Enter> {}<Left><CR><C-g>u<C-h><ESC><S-o>
 inoremap <<Enter> <><Left><CR><ESC><S-o>
 inoremap [<Enter> []<Left><CR><ESC><S-o>
 inoremap (<Enter> ()<Left><CR><ESC><S-o>
 inoremap { {}<LEFT>
 inoremap < <><LEFT>
-inoremap [ []<LEFT>
+inoremap [ []<LEFT><SPACE><SPACE><LEFT>
 inoremap ( ()<LEFT>
 inoremap " ""<LEFT>
 inoremap ' ''<LEFT>
+inoremap ` ``<LEFT>
 
 inoremap <C-j> <Down>
 inoremap <C-n> <Down>
