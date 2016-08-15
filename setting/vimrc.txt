@@ -30,11 +30,12 @@ inoremap ` ``<LEFT>
 
 inoremap <C-j> <Down>
 inoremap <C-n> <Down>
-inoremap <C-k> <Up>
+"inoremap <C-k> <Up>
 inoremap <C-p> <Up>
 inoremap <C-g> <Left>
 inoremap <C-b> <Left>
 inoremap <C-l> <Right>
+inoremap <C-f> <Right>
 inoremap <C-e> <Esc>$i<Right>
 inoremap <C-a> <Esc>0i
 
@@ -49,7 +50,7 @@ inoremap <silent> <C-d> <Del>
 " カーソルから行頭まで削除
 inoremap <silent> <C-d>e <Esc>lc^
 " カーソルから行末まで削除
-inoremap <silent> <C-d>0 <Esc>lc$
+inoremap <silent> <C-k> <Esc>lc$
 " カーソルから行頭までヤンク
 inoremap <silent> <C-y>e <Esc>ly0<Insert>
 " カーソルから行末までヤンク
