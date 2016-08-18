@@ -1,0 +1,63 @@
+#!/bin/sh
+
+function usage_exit() {
+    cat << EOF >&2
+Usage: $(basename $0) command
+       $(basename $0) -e file
+       $(basename $0) -v
+EOF
+    exit 1
+}
+
+edit_flg=0
+while getopts :veh opt
+do
+    case $opt in
+        v)
+            exit 0
+            ;;
+        e)
+            edit_flg=1
+            ;;
+        h)
+            usage_exit
+            ;;
+        \?)
+            usage_exit
+            ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+if [ $edit_flg -eq 1 ]; then
+    if [ $# -ne 1 ]; then
+        usage_exit
+    fi
+
+    sudoedit "$1"
+else
+    if [ $# -eq 0 ]; then
+        usage_exit
+    fi
+
+    quote_args=''
+
+    for arg in "$@"
+    do
+        arg=$(printf '%q' "$arg")
+        quote_args="$quote_args $arg"
+    done
+    quote_args=$(echo "$quote_args" | sed -e "s/\\\\'/'\"&\"'/g" -e 's/\\\\/&&/g')
+
+    quote_pwd=$(printf '%q' "$PWD" | sed "s/\\\\'/'\"&\"'/g")
+
+    temp_file=$(mktemp -u)
+
+    cygstart --hide -w -a runas sh -l -c "'echo \$\$ > $temp_file; exec < /proc/$$/fd/0 > /proc/$$/fd/1 2> /proc/$$/fd/2; cd $quote_pwd; $quote_args'" &
+
+    trap 'trap "" 1 2 3 15; ps | sed "s/^.//" | awk "\$2 == $(cat $temp_file) {print \$4}" | sudo xargs -I % c:/Windows/system32/taskkill /pid % /f > /dev/null 2>&1' 1 2 3 15
+    wait $!
+
+    rm -f $temp_file
+fi
