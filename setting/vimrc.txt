@@ -1,5 +1,3 @@
-:set encoding=utf-8 " 日本語文字化けを防ぐ
-:set fileencodings=iso-2022-jp,euc-jp,sjis,utf-8 " 日本語文字化けを防ぐ
 set number
 set showmatch
 set ruler       " カーソルが何行目の何列目に置かれているかを表示する
@@ -15,6 +13,7 @@ set tabstop=4   " タブ文字の表示幅 "noremap
 set shiftwidth=2   " Vimが挿入するインデントの幅 "
 set smarttab   " 行頭の余白内で Tab を打ち込むと、'shiftwidth' の数だけインデントする "
 set whichwrap=b,s,h,l,<,>,[,]>   " カーソルを行頭、行末で止まらないようにする "
+set mouse=a
 inoremap <silent> jk <Esc>
 inoremap {<Enter> {}<Left><CR><C-g>u<C-h><ESC><S-o>
 inoremap <<Enter> <><Left><CR><ESC><S-o>
@@ -26,22 +25,37 @@ inoremap [ []<LEFT><SPACE><SPACE><LEFT>
 inoremap ( ()<LEFT>
 inoremap " ""<LEFT>
 inoremap ' ''<LEFT>
-inoremap ` ``<LEFT>
 
+" インサートモードでのキーバインド
 inoremap <C-j> <Down>
 inoremap <C-n> <Down>
-"inoremap <C-k> <Up>
 inoremap <C-p> <Up>
-inoremap <C-g> <Left>
 inoremap <C-b> <Left>
 inoremap <C-l> <Right>
 inoremap <C-f> <Right>
 inoremap <C-e> <Esc>$i<Right>
 inoremap <C-a> <Esc>0i
 
+" ノーマルモードでのキーバインド
 nnoremap <C-e> $
 nnoremap <C-a> 0
 nnoremap <C-l> <Right>
+
+" ノーマルモードでの画面分割設定
+nnoremap s <Nop>
+nnoremap ss :<C-u>sp<CR> " 画面を横に分割
+nnoremap sv :<C-u>vs<CR> " 画面を縦に分割
+nnoremap sh <C-w>h<CR> " 画面を左に移動
+nnoremap sj <C-w>j<CR> " 画面を下に移動
+nnoremap sk <C-w>k<CR> " 画面を上に移動
+nnoremap sl <C-w>l<CR> " 画面を右に移動
+nnoremap sw <C-w>w<CR> " 画面を次に移動
+nnoremap st :<C-u>tabnew<CR> " タブ表示
+nnoremap sp gt " タブを次に移動
+nnoremap sn gT " タブを前に移動
+nnoremap sT :<C-u>Unite tab<CR> " タブ一覧表示
+nnoremap swq :<C-u>wq<CR> " ウィンドウを保存して閉じる
+nnoremap sq :<C-u>q<CR> " ウィンドウを閉じる
 
 " カーソル前の文字削除
 inoremap <silent> <C-h> <C-g>u<C-h>
@@ -55,6 +69,7 @@ inoremap <silent> <C-k> <Esc>lc$
 inoremap <silent> <C-y>e <Esc>ly0<Insert>
 " カーソルから行末までヤンク
 inoremap <silent> <C-y>0 <Esc>ly$<Insert>
+
 "カンレと行ハイライトon
 set cursorline
 "アンダーラインを引く（color terminal）
